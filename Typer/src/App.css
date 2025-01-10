@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
+
+:root {
+    --bgColor: #333;
+    --textPrimary: #fff;
+    --textSecondary: #666;
+    --primaryColor: #fd4;
+    --hoverColor: rgba(255, 255, 255, 0.2);
+    --focusColor: rgba(255, 255, 255, 0.3);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bgColor);
+    color: var(--textPrimary);
+    font-size: 1.4rem;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Navbar Styles */
+.navbar {
+    width: 100%;
+    position: relative;
+    top: 0;
+    background-color: #003366; /* Navbar background */
+    color: var(--textPrimary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.navbar h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00ff7f;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    padding: 5px 15px;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #b3b3b3;
+}
+
+.navbar a.active {
+    color: #00ff7f;
+    font-weight: bold;
+}
+
+/* Footer Styles */
+footer {
+    width: 100%;
+    background-color: #003366; /* Footer background */
+    color: var(--textPrimary);
+    text-align: center;
+    padding: 15px 20px;
+    position: relative;
+    bottom: 0;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+/* Game Content */
+h1 {
+    color: var(--primaryColor);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+h1 svg {
+    width: 40px;
+    fill: var(--primaryColor);
+}
+
+#header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin: 20px 6px 30px;
+}
+
+#buttons {
+    text-align: right;
+}
+
+#info {
+    color: var(--primaryColor);
+}
+
+button, .time-option {
+    background: var(--hoverColor);
+    border: 0;
+    color: var(--textPrimary);
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+button:hover, .time-option:hover {
+    background: var(--focusColor);
+}
+
+div#game {
+    line-height: 35px;
+    height: 105px;
+    overflow: hidden;
+    position: relative;
+}
+
+div#game:focus {
+    outline: 0;
+}
+
+div.word {
+    display: inline-block;
+    font-family: 'Roboto Mono', monospace;
+    margin: 0 5px;
+}
+
+.letter.correct {
+    color: green;
+}
+
+.letter.incorrect {
+    color: red;
+}
+
+.correct {
+    color: limegreen;
+}
+
+.incorrect {
+    color: tomato;
+}
+
+.missed {
+    color: lightcoral;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+#cursor {
+    display: none;
+    width: 2px;
+    height: 1.6rem;
+    background: var(--primaryColor);
+    position: fixed;
+    top: 198px;
+    left: 18px;
+    animation: blink 0.3s infinite;
+}
+
+#game:focus #cursor {
+    display: block;
+}
+
+#words {
+    width: 90%;
+    max-width: 800px;
+    height: 200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--primaryColor);
+    border-radius: 10px;
+    overflow-y: auto;
+    font-family: 'Roboto Mono', monospace;
+    color: var(--textPrimary);
+    text-align: justify;
+}
+
+.typing-input {
+    width: 90%;
+    max-width: 600px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    margin: 10px auto;
+    border: 2px solid var(--primaryColor);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: black; /* Updated to black */
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.typing-input:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--textPrimary);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Time Selection */
+.time-selection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.time-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.time-option {
+    padding: 10px 20px;
+    border: 1px solid var(--primaryColor);
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--primaryColor);
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.time-option:hover {
+    background-color: var(--hoverColor);
+    color: var(--textPrimary);
+}
+
+/* Chart Container Styles */
+.chart-container {
+    width: 80%;
+    max-width: 600px; /* Limit the width for medium size */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(98, 17, 17, 0.1);
+    border: 2px solid var(--primaryColor);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.chart-container canvas {
+    display: block;
+    width: 100%; /* Make the chart responsive */
+    height: auto; /* Maintain aspect ratio */
+}
