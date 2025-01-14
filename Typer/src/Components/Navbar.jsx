@@ -1,16 +1,20 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink } from "react-router-dom";
 import { FaHome, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import { GiCometSpark } from "react-icons/gi";
 
 const Navbar = () => {
   return (
     <>
       <div className="flex justify-between items-center bg-blue-950 p-2 m-3 gap-10">
-        <h1 className="text-4xl">
-          Fast<span className="text-green-500">Type</span>
-        </h1>
+      <NavLink to='/'>
+  <h1 className="text-4xl flex items-center">
+    Fast<span className="text-green-500 flex items-center"><GiCometSpark />Type</span>
+  </h1>
+</NavLink>
 
-        <div className="flex space-x-4 text-white text-sm">
+
+        <div className="flex space-x-10 text-white text-sm">
           <NavLink
             to="/"
             className={({ isActive }) =>
