@@ -113,9 +113,10 @@ const TypingGame = () => {
     try {
       // Calculate accuracy
       const totalWordsAttempted = correctCount + errorCount;
-      const accuracy = totalWordsAttempted > 0
-        ? ((correctCount / totalWordsAttempted) * 100).toFixed(2)
-        : 0;
+      const accuracy =
+        totalWordsAttempted > 0
+          ? parseFloat(((correctCount / totalWordsAttempted) * 100).toFixed(2)) // Ensure accuracy is a number
+          : 0;
 
       const resultsRef = collection(db, "Results");
       await addDoc(resultsRef, {
@@ -124,7 +125,7 @@ const TypingGame = () => {
         correctWords: correctCount,
         incorrectWords: errorCount,
         totalWords: totalWordsTyped,
-        accuracy, // Save accuracy to database
+        accuracy, // Save accuracy as a number
         time: selectedTime,
         date: new Date(),
       });
