@@ -42,85 +42,69 @@ const Navbar = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-between items-center bg-blue-950 p-2 m-3 gap-10">
-        <NavLink to="/">
-          <h1 className="text-4xl flex items-center">
-            Fast
-            <span className="text-green-500 flex items-center">
-              <GiCometSpark />
-              Type
-            </span>
-          </h1>
+    <div className="flex justify-between items-center bg-blue-950 p-2 m-3 gap-10">
+      <NavLink to="/">
+        <h1 className="text-4xl flex items-center">
+          Fast
+          <span className="text-green-500 flex items-center">
+            <GiCometSpark />
+            Type
+          </span>
+        </h1>
+      </NavLink>
+
+      <div className="flex space-x-10 text-white text-sm">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
+          }
+        >
+          <FaHome size={24} />
+          Home
         </NavLink>
 
-        <div className="flex space-x-10 text-white text-sm">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
-            }
-          >
-            <span>
-              <FaHome size={24} />
-              Home
-            </span>
-          </NavLink>
-
-          {!user && (
-            <>
-              <NavLink
-                to="/login"
-                className={({ isActive }) =>
-                  isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
-                }
-              >
-                <span>
-                  {" "}
-                  <FaSignInAlt size={24} />
-                  Login
-                </span>
-              </NavLink>
-              <NavLink
-                to="/register"
-                className={({ isActive }) =>
-                  isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
-                }
-              >
-                <span>
-                  <FaUserPlus size={24} />
-                  Register
-                </span>
-              </NavLink>
-            </>
-          )}
-
-          {user && (
+        {!user ? (
+          <>
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
+              }
+            >
+              <FaSignInAlt size={24} />
+              Login
+            </NavLink>
+            <NavLink
+              to="/register"
+              className={({ isActive }) =>
+                isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
+              }
+            >
+              <FaUserPlus size={24} />
+              Register
+            </NavLink>
+          </>
+        ) : (
+          <>
             <div
               onClick={handleLogout}
-              className="text-white hover:text-red-500 flex items-center space-x-2"
+              className="text-white hover:text-red-500 flex items-center space-x-2 cursor-pointer"
             >
-              <i className="fa-solid fa-right-from-bracket"></i>
-              <span>
-                <FaSignOutAlt size={18} /> Logout
-              </span>
+              <FaSignOutAlt size={18} /> Logout
             </div>
-          )}
-
-          <div>
             <NavLink
               to="/userprofile"
-              className="text-white hover:text-red-500 flex items-center space-x-2"
+              className={({ isActive }) =>
+                isActive ? "text-green-500 font-bold" : "hover:text-gray-300"
+              }
             >
-              <i className="fa-solid fa-right-from-bracket"></i>
-              <span>
-                <FaUser size={24} /> Profile
-              </span>
+              <FaUser size={24} /> Profile
             </NavLink>
-          </div>
-        </div>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

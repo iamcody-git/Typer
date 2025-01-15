@@ -4,9 +4,10 @@ import Layout from "./Layout/Layout";
 import Typing from "./Components/Typing";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
+import UserProfile from "./Components/UserProfile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UserProfile from "./Components/UserProfile";
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -15,8 +16,16 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Typing />} />
           <Route path="login" element={<Login />} />
-          <Route path="userprofile" element={<UserProfile />} />
           <Route path="register" element={<Register />} />
+          {/* Protect the UserProfile route */}
+          <Route
+            path="userprofile"
+            element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
       <ToastContainer />

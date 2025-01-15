@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../../firebaseConfig"; // Import from your Firebase config file
+import { db } from "../../firebaseConfig"; // Import from your Firebase config file
+import { collection, query, where, getDocs } from "firebase/firestore"; // Modular Firestore
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Modular Auth
 import { toast } from "react-toastify";
 
 const UserProfile = () => {
@@ -9,12 +11,14 @@ const UserProfile = () => {
 
   useEffect(() => {
     let isMounted = true; // Track if the component is mounted
+    const auth = getAuth(); // Initialize Firebase Auth
 
     const fetchUserResults = async (uid) => {
       try {
-        const resultsRef = db.collection("Results"); // Use v8 Firestore syntax
-        const userResultsQuery = resultsRef.where("uid", "==", uid); // Use v8 Firestore syntax
-        const querySnapshot = await userResultsQuery.get(); // Use v8 Firestore syntax
+        // Query Firestore for the user's results
+        const resultsRef = collection(db, "Results");
+        const userResultsQuery = query(resultsRef, where("uid", "==", uid));
+        const querySnapshot = await getDocs(userResultsQuery);
 
         if (isMounted) {
           const userResults = querySnapshot.docs.map((doc) => {
@@ -41,13 +45,15 @@ const UserProfile = () => {
       }
     };
 
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser && isMounted) {
         setUser({
           email: currentUser.email,
           creationTime: currentUser.metadata.creationTime,
         });
         fetchUserResults(currentUser.uid);
+      } else {
+        setUser(null); // Reset user if not logged in
       }
     });
 
@@ -74,7 +80,7 @@ const UserProfile = () => {
         )}
       </div>
 
-      <div className="bg-white p-4 rounded shadow-md">
+      <div className="bg-white p-4 rounded shadow-md text-black">
         <h2 className="text-lg font-bold mb-4">Your Typing Game Results</h2>
         {loading ? (
           <p>Loading...</p>
@@ -98,9 +104,7 @@ const UserProfile = () => {
                   <td className="border border-gray-300 p-2">{result.correctWords}</td>
                   <td className="border border-gray-300 p-2">{result.incorrectWords}</td>
                   <td className="border border-gray-300 p-2">{result.totalWords}</td>
-                  <td className="border border-gray-300 p-2">
-                    {result.accuracy}%
-                  </td>
+                  <td className="border border-gray-300 p-2">{result.accuracy}%</td>
                   <td className="border border-gray-300 p-2">{result.time}</td>
                   <td className="border border-gray-300 p-2">
                     {new Date(result.date).toLocaleString()}

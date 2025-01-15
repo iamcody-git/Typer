@@ -12,9 +12,10 @@ import {
   Legend,
 } from "chart.js";
 import { collection, addDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../../firebaseConfig.js";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // Register Chart.js components
 ChartJS.register(
@@ -50,9 +51,29 @@ const TypingGame = () => {
   const [totalWordsTyped, setTotalWordsTyped] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
-  const [timerStarted, setTimerStarted] = useState(false); // Tracks if the timer has started
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [user, setUser] = useState(null);
+
   const timerRef = useRef();
   const auth = getAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) {
+        // Redirect to login if not authenticated
+        toast.warn("Please log in to play the game!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        navigate("/login");
+      } else {
+        setUser(currentUser);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   const startNewGame = () => {
     const wordsArray =
@@ -79,7 +100,7 @@ const TypingGame = () => {
   };
 
   const startTimer = () => {
-    if (timerStarted) return; // Prevent multiple intervals
+    if (timerStarted) return;
     setTimerStarted(true);
     timerRef.current = setInterval(() => {
       setTimer((prev) => prev - 1);
@@ -90,7 +111,6 @@ const TypingGame = () => {
     setGameOver(true);
     if (timerRef.current) clearInterval(timerRef.current);
 
-    const user = auth.currentUser;
     if (user) {
       pushDataToDB();
     } else {
@@ -102,20 +122,11 @@ const TypingGame = () => {
   };
 
   const pushDataToDB = async () => {
-    const user = auth.currentUser;
-    if (!user) {
-      toast.error("Please log in to save your results!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
     try {
-      // Calculate accuracy
       const totalWordsAttempted = correctCount + errorCount;
       const accuracy =
         totalWordsAttempted > 0
-          ? parseFloat(((correctCount / totalWordsAttempted) * 100).toFixed(2)) // Ensure accuracy is a number
+          ? parseFloat(((correctCount / totalWordsAttempted) * 100).toFixed(2))
           : 0;
 
       const resultsRef = collection(db, "Results");
@@ -125,7 +136,7 @@ const TypingGame = () => {
         correctWords: correctCount,
         incorrectWords: errorCount,
         totalWords: totalWordsTyped,
-        accuracy, // Save accuracy as a number
+        accuracy,
         time: selectedTime,
         date: new Date(),
       });
@@ -147,7 +158,7 @@ const TypingGame = () => {
     setInput(value);
 
     if (!timerStarted) {
-      startTimer(); // Start timer on first input
+      startTimer();
     }
 
     if (value.endsWith(" ")) {
