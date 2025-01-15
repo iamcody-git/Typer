@@ -3,6 +3,7 @@ import Form from "./Form";
 import { auth } from "../../firebaseConfig.js";
 import { toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { errorMapping } from "../Utils/errorMapping.js";
 
 const Login = () => {
   const [value, setValue] = useState({
@@ -20,7 +21,7 @@ const Login = () => {
     const { email, password } = value;
 
     if (!email || !password) {
-      toast.warn('Please fill the required fields!', {
+      toast.warn('Email and Password are required', {
         position: "top-left",
         autoClose: 3000,
         hideProgressBar: false,
@@ -37,7 +38,7 @@ const Login = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        toast.success("🎉 Login successful!", {
+        toast.success('Login successful!', {
           position: "top-right",
           autoClose: 3000,
         });
@@ -48,8 +49,8 @@ const Login = () => {
         });
       })
       .catch((err) => {
-        console.error(err.message);
-        toast.error(`🚨 ${err.message}`, {
+        const errorMessage = errorMapping[err.code] || 'An error occurred during login';
+        toast.error(`🚨 ${errorMessage}`, {
           position: "top-right",
           autoClose: 3000,
         });
@@ -60,3 +61,4 @@ const Login = () => {
 };
 
 export default Login;
+

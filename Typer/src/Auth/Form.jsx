@@ -1,20 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import GoogleButton from 'react-google-button'
+import GoogleButton from "react-google-button";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../../firebaseConfig.js";
+import { toast } from "react-toastify";
+import { errorMapping } from "../Utils/errorMapping.js";
 
 const Form = ({ type, value, onChange, onSubmit }) => {
+  const handleGoogleSignIn = () => {
+    const provider = new GoogleAuthProvider();
 
-  const handleSignIn = async() => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      console.log("User Info: ", user);
-      
-    } catch (error) {
-      console.log("Error during sign-in: ",error.message);
-      
-    }
-  }
+    signInWithPopup(auth, provider)
+      .then((res) => {
+        toast.success("Google Login successful!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        console.log("User Info:", res.user);
+      })
+      .catch((err) => {
+        const errorMessage =
+          errorMapping[err.code] || "Unable to log in with Google. Please try again.";
+        toast.error(`🚨 ${errorMessage}`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        console.error("Google Sign-In Error:", err);
+      });
+  };
+
   return (
     <form
       onSubmit={onSubmit}
@@ -89,11 +103,11 @@ const Form = ({ type, value, onChange, onSubmit }) => {
           {type === "login" ? "Login" : "Register"}
         </button>
 
-        <span className="text-black text-sm">OR</span>
-        
-        <span className="p-2 justify-center items-center flex">
-        <GoogleButton onClick={handleSignIn} />
-        </span>
+        <span className="text-black text-sm block text-center mt-2">OR</span>
+
+        <div className="p-2 flex justify-center">
+          <GoogleButton onClick={handleGoogleSignIn} />
+        </div>
 
         <p className="text-blue-500 mt-4 text-center text-sm">
           {type === "login" ? (

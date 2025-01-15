@@ -21,7 +21,7 @@ const Register = () => {
     const { email, password, username } = value;
 
     if (!email || !password || !username) {
-      toast.warning("Please fill all the fields", {
+      toast.warning('All fields are required', {
         position: "top-left",
         autoClose: 3000,
         hideProgressBar: false,
@@ -38,12 +38,11 @@ const Register = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        toast.success("🎉 User registered successfully!", {
+        toast.success('Registration successful!', {
           position: "top-right",
           autoClose: 3000,
         });
 
-        // Reset the form fields
         setValue({
           username: "",
           email: "",
@@ -51,8 +50,8 @@ const Register = () => {
         });
       })
       .catch((err) => {
-        console.error(err.message);
-        toast.error(`🚨 ${err.message}`, {
+        const errorMessage = errorMapping[err.code] || 'An error occurred during registration';
+        toast.error(`🚨 ${errorMessage}`, {
           position: "top-right",
           autoClose: 3000,
         });
@@ -61,5 +60,6 @@ const Register = () => {
 
   return <Form type="register" value={value} onChange={handleChange} onSubmit={handleSubmit} />;
 };
+
 
 export default Register;
