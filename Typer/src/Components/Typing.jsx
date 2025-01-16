@@ -128,9 +128,9 @@ const TypingGame = () => {
         totalWordsAttempted > 0
           ? parseFloat(((correctCount / totalWordsAttempted) * 100).toFixed(2))
           : 0;
-
+  
       const resultsRef = collection(db, "Results");
-      await addDoc(resultsRef, {
+      const docRef = await addDoc(resultsRef, {
         uid: user.uid,
         language,
         correctWords: correctCount,
@@ -140,6 +140,7 @@ const TypingGame = () => {
         time: selectedTime,
         date: new Date(),
       });
+      console.log("Result saved with ID:", docRef.id); // Log document ID
       toast.success("Results saved successfully!", {
         position: "top-right",
         autoClose: 3000,
