@@ -17,7 +17,6 @@ function App() {
           <Route index element={<Typing />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          {/* Protect the UserProfile route */}
           <Route
             path="userprofile"
             element={

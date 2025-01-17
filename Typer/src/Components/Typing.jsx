@@ -28,7 +28,7 @@ ChartJS.register(
   Legend
 );
 
-const TypingGame = () => {
+const Typing = () => {
   const englishWordsArray = `
     in of that good real not school set world take infinity aurora mystic digital pathshala intern
   `
@@ -60,15 +60,17 @@ const TypingGame = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (!currentUser) {
-        // Redirect to login if not authenticated
+      if (currentUser) {
+        // User is logged in, redirect to the root route (`/`)
+        setUser(currentUser);
+        navigate("/"); // Redirect to the root route after login
+      } else {
+        // User is not logged in, redirect to the login page
         toast.warn("Please log in to play the game!", {
           position: "top-right",
           autoClose: 3000,
         });
         navigate("/login");
-      } else {
-        setUser(currentUser);
       }
     });
 
@@ -128,7 +130,7 @@ const TypingGame = () => {
         totalWordsAttempted > 0
           ? parseFloat(((correctCount / totalWordsAttempted) * 100).toFixed(2))
           : 0;
-  
+
       const resultsRef = collection(db, "Results");
       const docRef = await addDoc(resultsRef, {
         uid: user.uid,
@@ -309,4 +311,4 @@ const TypingGame = () => {
   );
 };
 
-export default TypingGame;
+export default Typing;

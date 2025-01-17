@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../firebaseConfig.js";
@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { errorMapping } from "../Utils/errorMapping.js";
 
 const Form = ({ type, value, onChange, onSubmit }) => {
+  const navigate = useNavigate();
+
   const handleGoogleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -17,6 +19,11 @@ const Form = ({ type, value, onChange, onSubmit }) => {
           autoClose: 3000,
         });
         console.log("User Info:", res.user);
+
+        // Ensure navigation occurs after authentication state updates
+        setTimeout(() => {
+          navigate("/"); // Redirect to the root route
+        }, 500); // Slight delay to allow Firebase auth state to sync
       })
       .catch((err) => {
         const errorMessage =
