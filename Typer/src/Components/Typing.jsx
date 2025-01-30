@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import "../App.css";
 import Header from "../Components/Header.jsx";
 import WordsDisplay from "../Components/wordDisplay.jsx";
@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Typing = () => {
-  const ENGLISH_WORDS = ["in","of","that","good","real","digital","pathshala","laptop","programming","animals"];
-  const NEPALI_WORDS = ["नमस्ते","संसार","खुशी","धन्यवाद","आमा","खाना","सूर्य"];
+  const ENGLISH_WORDS = ["in", "of", "that", "good", "real", "digital", "pathshala", "laptop", "programming", "animals"];
+  const NEPALI_WORDS = ["नमस्ते", "संसार", "खुशी", "धन्यवाद", "आमा", "खाना", "सूर्य"];
 
   const auth = getAuth();
   const navigate = useNavigate();
@@ -31,13 +31,13 @@ const Typing = () => {
 
   const timerRef = useRef();
 
-  const startNewGame = () => {
+  const startNewGame = useCallback(() => {
     const wordArray = language === "english" ? ENGLISH_WORDS : NEPALI_WORDS;
     setGameWords(generateRandomWords(wordArray));
     resetGameState(
       {
         setGameOver,
-        setTimer: () => setTimer(selectedTime), 
+        setTimer: () => setTimer(selectedTime),
         setInput,
         setCurrentWordIndex,
         setCorrectCount,
@@ -47,7 +47,7 @@ const Typing = () => {
       },
       selectedTime
     );
-  };
+  }, [language, selectedTime]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -59,9 +59,7 @@ const Typing = () => {
 
     if (value.endsWith(" ")) {
       const isCorrect = value.trim() === gameWords[currentWordIndex];
-      setWordStatuses((prev) =>
-        prev.concat(isCorrect ? "correct" : "incorrect")
-      );
+      setWordStatuses((prev) => [...prev, isCorrect ? "correct" : "incorrect"]);
       setCurrentWordIndex((prev) => prev + 1);
       setInput("");
       if (isCorrect) setCorrectCount((prev) => prev + 1);
@@ -71,9 +69,9 @@ const Typing = () => {
 
   const handleTimeChange = (time) => {
     const newTime = parseInt(time, 10);
-    setSelectedTime(newTime); 
-    setTimer(newTime); 
-    startNewGame(); 
+    setSelectedTime(newTime);
+    setTimer(newTime);
+    startNewGame();
   };
 
   useEffect(() => {
@@ -89,7 +87,7 @@ const Typing = () => {
 
   useEffect(() => {
     startNewGame();
-  }, [language]);
+  }, [language, startNewGame]);
 
   useEffect(() => {
     if (timer <= 0) {
@@ -103,10 +101,7 @@ const Typing = () => {
           correctWords: correctCount,
           incorrectWords: errorCount,
           totalWords: correctCount + errorCount,
-          accuracy:
-            ((correctCount / (correctCount + errorCount || 1)) * 100).toFixed(
-              2
-            ),
+          accuracy: ((correctCount / (correctCount + errorCount || 1)) * 100).toFixed(2),
           time: selectedTime,
         });
       }
@@ -119,9 +114,7 @@ const Typing = () => {
         timer={timer}
         selectedTime={selectedTime}
         onNewGame={startNewGame}
-        onToggleLanguage={() =>
-          setLanguage((prev) => (prev === "english" ? "nepali" : "english"))
-        }
+        onToggleLanguage={() => setLanguage((prev) => (prev === "english" ? "nepali" : "english"))}
         language={language}
         onTimeChange={handleTimeChange}
       />
@@ -129,17 +122,13 @@ const Typing = () => {
         <ChartDisplay correctCount={correctCount} errorCount={errorCount} />
       ) : (
         <>
-          <WordsDisplay
-            words={gameWords}
-            wordStatuses={wordStatuses}
-            currentWordIndex={currentWordIndex}
-          />
+          <WordsDisplay words={gameWords} wordStatuses={wordStatuses} currentWordIndex={currentWordIndex} />
           <input
             type="text"
             value={input}
             onChange={handleInputChange}
             autoFocus
-            placeholder="Start typing..."
+            placeholder="Start typing......"
             style={{
               color: "black",
               backgroundColor: "#fff",
@@ -147,6 +136,7 @@ const Typing = () => {
               borderRadius: "4px",
               padding: "8px",
               fontSize: "16px",
+              width: "50%",
             }}
           />
         </>
