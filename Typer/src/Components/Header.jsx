@@ -1,5 +1,3 @@
-import React from "react";
-
 const Header = ({
   timer,
   selectedTime,
@@ -26,7 +24,9 @@ const Header = ({
 
       {/* Timer Selection Section */}
       <div style={{ textAlign: "center" }}>
-        <label style={{ fontSize: "14px", marginBottom: "8px", display: "block" }}>
+        <label
+          style={{ fontSize: "14px", marginBottom: "8px", display: "block" }}
+        >
           Set Timer:
         </label>
         <div

@@ -1,4 +1,3 @@
-import React from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -38,9 +37,9 @@ const ChartDisplay = ({ correctCount, errorCount }) => {
 
   const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false, 
+    maintainAspectRatio: false,
     plugins: {
-      title: { display: true, text: "Typing Test Results", color:'yellow' },
+      title: { display: true, text: "Typing Test Results", color: "yellow" },
     },
     scales: {
       y: {
@@ -55,8 +54,8 @@ const ChartDisplay = ({ correctCount, errorCount }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh", 
-        width: "100vw", 
+        height: "100vh",
+        width: "100vw",
       }}
     >
       <div style={{ width: "500px", height: "400px" }}>

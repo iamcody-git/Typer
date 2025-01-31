@@ -13,15 +13,14 @@ const ProtectedRoute = ({ children }) => {
       setLoading(false);
     });
 
-    return () => unsubscribe(); // Clean up listener on unmount
+    return () => unsubscribe(); 
   }, []);
 
   if (loading) {
-    // Show a loading indicator while checking auth state
     return <div>Loading...</div>;
   }
 
-  // If no user is authenticated, redirect to the login page
+
   return user ? children : <Navigate to="/login" replace />;
 };
 

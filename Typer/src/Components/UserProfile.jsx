@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { db } from "../../firebaseConfig"; // Import from your Firebase config file
-import { collection, query, where, getDocs } from "firebase/firestore"; // Modular Firestore
-import { getAuth, onAuthStateChanged } from "firebase/auth"; // Modular Auth
+import { useEffect, useState } from "react";
+import { db } from "../../firebaseConfig"; 
+import { collection, query, where, getDocs } from "firebase/firestore"; 
+import { getAuth, onAuthStateChanged } from "firebase/auth"; 
 import { toast } from "react-toastify";
 
 const UserProfile = () => {
@@ -10,8 +10,8 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; // Track if the component is mounted
-    const auth = getAuth(); // Initialize Firebase Auth
+    let isMounted = true; 
+    const auth = getAuth(); 
 
     const fetchUserResults = async (uid) => {
       try {
@@ -26,7 +26,7 @@ const UserProfile = () => {
             return {
               id: doc.id,
               ...data,
-              date: data.date.toDate(), // Convert Firestore Timestamp to JavaScript Date
+              date: data.date.toDate(), 
             };
           });
 
@@ -53,12 +53,12 @@ const UserProfile = () => {
         });
         fetchUserResults(currentUser.uid);
       } else {
-        setUser(null); // Reset user if not logged in
+        setUser(null); 
       }
     });
 
     return () => {
-      isMounted = false; // Cleanup on unmount
+      isMounted = false; 
       unsubscribe();
     };
   }, []);
